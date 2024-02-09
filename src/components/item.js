@@ -1,3 +1,4 @@
+import "./item.css"
 function Item() {
   return (
     <>
