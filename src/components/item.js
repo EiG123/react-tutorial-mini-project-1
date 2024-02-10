@@ -1,9 +1,14 @@
 import "./item.css"
-function Item() {
+function Item(props) {
+  const {data} = props
   return (
-    <>
-      <p>รายการที่ 1</p>
-    </>
+    <div className="list-item">
+      <p className="title">{data.title}</p>
+      <div className="button-container">
+        <button className="btn">Delete</button>
+        <button className="btn">Edit</button>
+      </div>
+    </div>
   );
 }
 
