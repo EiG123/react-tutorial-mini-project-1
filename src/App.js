@@ -2,49 +2,50 @@ import "./App.css";
 import Header from "./components/Header";
 import AddForm from "./components/AddForm";
 import Item from "./components/item";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App(props) {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "แก้ bug โปรแกรม" },
-    { id: 2, title: "ทำงาน" },
-    { id: 3, title: "ออกกำลังกาย" },
-  ]);
+  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks")) || []);
   const [title, setTitle] = useState("");
   const [editId, setEditId] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+  }, [tasks]);
+
   function deleteTask(id) {
     const result = tasks.filter((item) => item.id !== id);
     setTasks(result);
   }
 
-  function editTask(id){
-    setEditId(id)
-    const editTask = tasks.find((item)=>item.id === id)
-    setTitle(editTask.title)
+  function editTask(id) {
+    setEditId(id);
+    const editTask = tasks.find((item) => item.id === id);
+    setTitle(editTask.title);
   }
 
   function saveTask(e) {
     e.preventDefault();
     if (!title) {
-      alert("กรุณาป้อนข้อมูล")
-    }else if(editId){
+      alert("กรุณาป้อนข้อมูล");
+    } else if (editId) {
       //update task
-      const updateTask = tasks.map((item)=>{
-        if(item.id === editId){
-          return {...item,title:title}
+      const updateTask = tasks.map((item) => {
+        if (item.id === editId) {
+          return { ...item, title: title };
         }
         return item;
-      })
-      setTasks(updateTask)
-      setEditId(null)
-      setTitle("")
-    }else{
-      const newTask={
-        id:Math.floor(Math.random()*1000),
-        title:title
-      }
-      setTasks([...tasks,newTask])
-      setTitle("")
+      });
+      setTasks(updateTask);
+      setEditId(null);
+      setTitle("");
+    } else {
+      const newTask = {
+        id: Math.floor(Math.random() * 1000),
+        title: title,
+      };
+      setTasks([...tasks, newTask]);
+      setTitle("");
     }
   }
 
@@ -52,10 +53,20 @@ function App(props) {
     <div className="App">
       <Header />
       <div className="container">
-        <AddForm title={title} setTitle={setTitle} saveTask={saveTask} editId={editId}/>
+        <AddForm
+          title={title}
+          setTitle={setTitle}
+          saveTask={saveTask}
+          editId={editId}
+        />
         <section>
           {tasks.map((data) => (
-            <Item key={data.id} data={data} deleteTask={deleteTask} editTask={editTask}/>
+            <Item
+              key={data.id}
+              data={data}
+              deleteTask={deleteTask}
+              editTask={editTask}
+            />
           ))}
         </section>
       </div>
