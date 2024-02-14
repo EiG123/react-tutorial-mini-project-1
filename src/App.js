@@ -27,6 +27,17 @@ function App(props) {
     e.preventDefault();
     if (!title) {
       alert("กรุณาป้อนข้อมูล")
+    }else if(editId){
+      //update task
+      const updateTask = tasks.map((item)=>{
+        if(item.id === editId){
+          return {...item,title:title}
+        }
+        return item;
+      })
+      setTasks(updateTask)
+      setEditId(null)
+      setTitle("")
     }else{
       const newTask={
         id:Math.floor(Math.random()*1000),
